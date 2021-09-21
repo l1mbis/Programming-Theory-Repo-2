@@ -14,15 +14,15 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetButtonDown("Jump")) {
+        if (Input.GetButtonDown("Jump") && !GameManager.Instance.gameOver) {
             playerRb.velocity = transform.position;
             playerRb.AddRelativeForce(Vector3.up * forceToAdd, ForceMode.Impulse);
         }
     }
 
     private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("France") || other.gameObject.CompareTag("Ground")) {
-            GameManager.Instance.gameOver = true;
+        if (other.gameObject.CompareTag("Fence") || other.gameObject.CompareTag("Ground")) {
+            GameManager.Instance.GameOver();
         }
     }
 }
