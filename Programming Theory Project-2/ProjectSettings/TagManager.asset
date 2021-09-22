@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Fence
+  - Normal_Fence
   - Fance
   - Normal_Fance
   layers:
