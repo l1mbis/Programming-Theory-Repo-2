@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetButtonDown("Jump")) {
+        if (Input.GetButtonDown("Jump") && !GameManager.Instance.gameOver) {
             jump();
         }
     }
@@ -25,6 +25,15 @@ public class PlayerController : MonoBehaviour {
                 jump();
             
             GameManager.Instance.gameOver = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Normal_Fence")) {
+            if(other.transform.parent.gameObject.name == "Fence(Clone)")
+                GameManager.Instance.updateScore(1);
+            else
+                GameManager.Instance.updateScore(3);
         }
     }
 

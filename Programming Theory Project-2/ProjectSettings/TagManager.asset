@@ -7,8 +7,6 @@ TagManager:
   - Ground
   - Fence
   - Normal_Fence
-  - Fance
-  - Normal_Fance
   layers:
   - Default
   - TransparentFX
