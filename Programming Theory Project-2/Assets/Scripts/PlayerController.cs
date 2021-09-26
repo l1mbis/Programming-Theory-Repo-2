@@ -15,14 +15,21 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         if (Input.GetButtonDown("Jump")) {
-            playerRb.velocity = transform.position;
-            playerRb.AddRelativeForce(Vector3.up * forceToAdd, ForceMode.Impulse);
+            jump();
         }
     }
 
     private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("France") || other.gameObject.CompareTag("Ground")) {
+        if (other.gameObject.CompareTag("Fence") || other.gameObject.CompareTag("Ground")) {
+            if(!GameManager.Instance.gameOver)
+                jump();
+            
             GameManager.Instance.gameOver = true;
         }
+    }
+
+    private void jump() {
+        playerRb.velocity = transform.position;
+        playerRb.AddForce(Vector3.up * forceToAdd, ForceMode.Impulse);
     }
 }
