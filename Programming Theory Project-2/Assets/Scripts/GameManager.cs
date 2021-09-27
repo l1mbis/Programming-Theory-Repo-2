@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     [SerializeField] private GameObject player;
 
@@ -17,16 +18,24 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField] private GameObject[] fances;
 
+    [SerializeField] private GameObject afterLose;
+
+    public Text bestScore;
+
     private float secondsToWait = 0;
     
     public bool gameOver = true;
 
     private int points = 0;
 
-    public int maxScore = 0;
+    private int maxScore = 0;
 
     private void Start() {
         Instance = this;
+        
+        LoadData();
+        
+        bestScore.text = $"Best score: {maxScore}";
     }
 
     IEnumerator SpawnRandomFence() {
@@ -44,6 +53,26 @@ public class GameManager : MonoBehaviour {
             else
                 Instantiate(fances[1], spawnPos, fances[1].transform.rotation);
             StartCoroutine(SpawnRandomFence());
+        }
+    }
+
+    public void GameOver() {
+        gameOver = true;
+        GameObject newRecord = afterLose.transform.GetChild(0).gameObject;
+        
+        afterLose.SetActive(true);
+        score.SetActive(false);
+
+        if (points > maxScore) {
+            maxScore = points;
+
+            SaveData();
+
+            newRecord.GetComponent<Text>().text = $"New record: {maxScore}";
+        }
+        else {
+            newRecord.GetComponent<Text>().color = Color.yellow;
+            newRecord.GetComponent<Text>().text = $"Your score: {points}";
         }
     }
 
@@ -84,9 +113,11 @@ public class GameManager : MonoBehaviour {
     
     #region Menu
 
+    [SerializeField] private GameObject menu;
+
     public void StartGame() {
         score.SetActive(true);
-        GameObject.Find("Menu").SetActive(false);
+        menu.SetActive(false);
         
         gameOver = false;
         
@@ -102,6 +133,10 @@ public class GameManager : MonoBehaviour {
 #else
 		Application.Quit();
 #endif
+    }
+
+    public void RestartGame() {
+        SceneManager.LoadScene(0);
     }
     
     #endregion

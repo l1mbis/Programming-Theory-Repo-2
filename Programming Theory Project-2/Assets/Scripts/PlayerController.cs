@@ -20,16 +20,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("Fence") || other.gameObject.CompareTag("Ground")) {
+        if ((other.gameObject.CompareTag("Fence") || other.gameObject.CompareTag("Ground")) && !GameManager.Instance.gameOver) {
             if(!GameManager.Instance.gameOver)
                 jump();
-            
-            GameManager.Instance.gameOver = true;
+
+            GameManager.Instance.GameOver();
         }
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Normal_Fence")) {
+        if (other.gameObject.CompareTag("Normal_Fence") && !GameManager.Instance.gameOver) {
             if(other.transform.parent.gameObject.name == "Fence(Clone)")
                 GameManager.Instance.updateScore(1);
             else
